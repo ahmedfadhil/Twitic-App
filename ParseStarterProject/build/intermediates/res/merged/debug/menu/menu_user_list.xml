@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context="com.parse.starter.UserList">
+    <item android:id="@+id/tweet" android:title="Tweet" app:showAsAction="always" />
+</menu>
+<!-- From: file:/Users/robpercival/Documents/Android/Apps/Twitter/ParseStarterProject/src/main/res/menu/menu_user_list.xml -->
