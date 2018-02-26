@@ -26,23 +26,55 @@ public class ViewFeed extends AppCompatActivity {
 //    List<Map<String, String>> tweetData = new ArrayList<Map<String, String>>();
 
     ListView listView;
-
+    SimpleAdapter simpleAdapter;
+    List<Map<String, String>> tweetData = new ArrayList<Map<String, String>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_feed);
-        listView = (ListView) findViewById(R.id.listView);
-        List<Map<String, String>> tweetData = new ArrayList<Map<String, String>>();
+        listView = (ListView) findViewById(R.id.yourFeedListView);
+        tweetData = new ArrayList<Map<String, String>>();
+        simpleAdapter = new SimpleAdapter(this, tweetData, android.R.layout.simple_expandable_list_item_2, new String[]{"content", "username"}, new int[]{android.R.id.text1, android.R.id.text2});
 
-        for (int i = 0; i < 5; i++) {
-            Map<String, String> tweet = new HashMap<String, String>(2);
-            tweet.put("content", "Tweet content" + String.valueOf(i));
-            tweet.put("username", "Tweeter User" + String.valueOf(i));
 
-        }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
+        query.whereContainedIn("username", ParseUser.getCurrentUser().getList("isFollowing"));
+        query.orderByDescending("createdAt");
+        query.setLimit(20);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> tweetObjects, ParseException e) {
+                if (e == null) {
+//                    Log.i("score", "Retrieved" + tweetObjects.size() + " scores");
+                    if (tweetObjects.size() > 0) {
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, tweetData, android.R.layout.simple_expandable_list_item_2, new String[]{"content", "username"}, new int[]{android.R.id.text1, android.R.id.text2});
-        listView.setAdapter(simpleAdapter);
+                        for (ParseObject tweetObject : tweetObjects) {
+                            Map<String,String> tweet = new HashMap<String, String>(2);
+                            tweet.put("content", tweetObject.getString("content"));
+                            tweet.put("username", tweetObject.getString("username"));
+                            tweetData.add(tweet);
+
+                        }
+
+
+                        listView.setAdapter(simpleAdapter);
+                    }
+
+                } else {
+                    Log.i("score", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+
+//        for (int i = 0; i < 5; i++) {
+//            Map<String, String> tweet = new HashMap<String, String>(2);
+//            tweet.put("content", "Tweet content" + String.valueOf(i));
+//            tweet.put("username", "Tweeter User" + String.valueOf(i));
+//
+//            tweetData.add(tweet)
+//
+//        }
+
 
 
 //        listView = (ListView) findViewById(R.id.yourFeedListView);

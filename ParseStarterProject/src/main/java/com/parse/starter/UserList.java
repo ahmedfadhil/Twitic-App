@@ -193,6 +193,8 @@ public class UserList extends AppCompatActivity {
 
         if (id == R.id.feed) {
             Intent i = new Intent(getApplicationContext(), ViewFeed.class);
+
+
         } else if (id == R.id.tweet) {
             AlertDialog.Builder builder = new AlertDialog.Builder();
             builder.setTitle("Send a Tweet");
