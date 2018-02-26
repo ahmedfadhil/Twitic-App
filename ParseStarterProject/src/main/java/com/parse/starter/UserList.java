@@ -2,6 +2,7 @@ package com.parse.starter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -189,8 +190,10 @@ public class UserList extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.tweet) {
+
+        if (id == R.id.feed) {
+            Intent i = new Intent(getApplicationContext(), ViewFeed.class);
+        } else if (id == R.id.tweet) {
             AlertDialog.Builder builder = new AlertDialog.Builder();
             builder.setTitle("Send a Tweet");
             final EditText tweetContent = new EditText(this);
@@ -202,17 +205,17 @@ public class UserList extends AppCompatActivity {
                     Log.i("AppInfo", String.valueOf(tweetContent.getText()));
 
                     ParseObject tweet = new ParseObject("tweet");
-                    tweet.put("content",String.valueOf(tweetContent.getText()));
+                    tweet.put("content", String.valueOf(tweetContent.getText()));
                     tweet.put("username", String.valueOf(ParseUser.getCurrentUser().getUsername()));
-                    tweet.saveInBackground( new SaveCallback(){
-                     @Override
-                        public void done(ParseException e){
-                         if (e==null){
-                             Toast.makeText(getApplicationContext(), "Tweet was sent", Toast.LENGTH_LONG).show();
-                         }else {
-                             Toast.makeText(getApplicationContext(), "Tweet was not sent!", Toast.LENGTH_LONG).show();
-                         }
-                     }
+                    tweet.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Toast.makeText(getApplicationContext(), "Tweet was sent", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Tweet was not sent!", Toast.LENGTH_LONG).show();
+                            }
+                        }
                     });
                 }
             });
